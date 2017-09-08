@@ -16,11 +16,13 @@ final class Post: Model {
     /// The content of the post
     var content: String
     var imageUrl: String
+    var likesCount: Int = 0
     
     /// The column names for `id` and `content` in the database
     static let idKey = "id"
     static let contentKey = "content"
     static let imageUrlKey = "imageUrl"
+    static let likesCountKey = "likesCount"
 
     /// Creates a new Post
     init(content: String, imageUrl: String) {
@@ -35,6 +37,7 @@ final class Post: Model {
     init(row: Row) throws {
         content = try row.get(Post.contentKey)
         imageUrl = try row.get(Post.imageUrlKey)
+        likesCount = try row.get(Post.likesCountKey)
     }
 
     // Serializes the Post to the database
@@ -42,6 +45,7 @@ final class Post: Model {
         var row = Row()
         try row.set(Post.contentKey, content)
         try row.set(Post.imageUrlKey, imageUrl)
+        try row.set(Post.likesCountKey, likesCount)
         return row
     }
 }
@@ -56,6 +60,7 @@ extension Post: Preparation {
             builder.id()
             builder.string(Post.contentKey)
             builder.string(Post.imageUrlKey)
+            builder.string(Post.likesCountKey)
         }
     }
 
@@ -85,6 +90,7 @@ extension Post: JSONConvertible {
         try json.set(Post.idKey, id)
         try json.set(Post.contentKey, content)
         try json.set(Post.imageUrlKey, imageUrl)
+        try json.set(Post.likesCountKey, likesCount)
         return json
     }
 }
@@ -108,6 +114,8 @@ extension Post: Updateable {
             // the setter callback will be called.
             UpdateableKey(Post.contentKey, String.self) { post, content in
                 post.content = content
+            }, UpdateableKey(Post.likesCountKey, Int.self) { post, likesCount in
+                post.likesCount = likesCount
             }
         ]
     }
