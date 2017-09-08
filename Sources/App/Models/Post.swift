@@ -25,9 +25,10 @@ final class Post: Model {
     static let likesCountKey = "likesCount"
 
     /// Creates a new Post
-    init(content: String, imageUrl: String) {
+    init(content: String, imageUrl: String, likesCount: Int) {
         self.content = content
         self.imageUrl = imageUrl
+        self.likesCount = likesCount
     }
 
     // MARK: Fluent Serialization
@@ -81,7 +82,8 @@ extension Post: JSONConvertible {
     convenience init(json: JSON) throws {
         try self.init(
             content: json.get(Post.contentKey),
-            imageUrl: json.get(Post.imageUrlKey)
+            imageUrl: json.get(Post.imageUrlKey),
+            likesCount: json.get(Post.likesCountKey)
         )
     }
     
