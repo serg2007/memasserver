@@ -19,9 +19,9 @@ final class User: Model {
     
     var imageUrl: String?
     
-    var userTagsIds: [Int64]?
+//    var userTagsIds: [Int64]?
     
-    var userPostsIds: [Int64]?
+    
     
     /// The user's email
     var email: String
@@ -30,13 +30,13 @@ final class User: Model {
     var password: String?
     
     /// Creates a new User
-    init(name: String, email: String, password: String? = nil, imageUrl: String? = nil, userTagsIds: [Int64]? = nil, userPostsIds: [Int64]? = nil) {
+    init(name: String, email: String, password: String? = nil, imageUrl: String? = "") {
         self.name = name
         self.email = email
         self.password = password
         self.imageUrl = imageUrl
-        self.userTagsIds = userTagsIds
-        self.userPostsIds = userPostsIds
+//        self.userTagsIds = userTagsIds
+//        self.userPostsIds = userPostsIds
     }
     
     // MARK: Row
@@ -47,8 +47,8 @@ final class User: Model {
         email = try row.get("email")
         password = try row.get("password")
         imageUrl = try row.get("imageUrl")
-        userTagsIds = try row.get("userTagsIds")
-        userPostsIds = try row.get("userPostsIds")
+//        userTagsIds = try row.get("userTagsIds")
+//        userPostsIds = try row.get("userPostsIds")
     }
     
     // Serializes the Post to the database
@@ -58,8 +58,8 @@ final class User: Model {
         try row.set("email", email)
         try row.set("password", password)
         try row.set("imageUrl", imageUrl)
-        try row.set("userTagsIds", userTagsIds)
-        try row.set("userPostsIds", userPostsIds)
+//        try row.set("userTagsIds", userTagsIds)
+//        try row.set("userPostsIds", userPostsIds)
         return row
     }
 }
@@ -75,8 +75,9 @@ extension User: Preparation {
             builder.string("email")
             builder.string("password")
             builder.string("imageUrl")
-            builder.string("userTagsIds")
-            builder.string("userPostsIds")
+//            builder.foreignKey("posts_id", references: "id", on: Post.self)
+//            builder.string("userTagsIds")
+//            builder.string("userPostsIds")
         }
     }
     
@@ -148,4 +149,10 @@ extension Request {
 // with an access token.
 extension User: TokenAuthenticatable {
     typealias TokenType = Token
+}
+
+extension User {
+    func posts() throws -> Children<User, Post> {
+        return try children()
+    }
 }

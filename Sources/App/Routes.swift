@@ -110,6 +110,12 @@ extension Droplet {
             let user = try req.user()
             return user
         }
+        token.get("userPosts") { req in
+            let posts = try req.user().posts().all().makeJSON()
+            return posts as ResponseRepresentable
+        }
     }
     
 }
+
+

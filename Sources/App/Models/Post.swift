@@ -16,19 +16,22 @@ final class Post: Model {
     /// The content of the post
     var content: String
     var imageUrl: String
+    var userId: String?
     var likesCount: Int = 0
     
     /// The column names for `id` and `content` in the database
     static let idKey = "id"
+    static let userIdKey = "user_id"
     static let contentKey = "content"
     static let imageUrlKey = "imageUrl"
     static let likesCountKey = "likesCount"
 
     /// Creates a new Post
-    init(content: String, imageUrl: String, likesCount: Int) {
+    init(content: String, imageUrl: String, likesCount: Int, userId: String) {
         self.content = content
         self.imageUrl = imageUrl
         self.likesCount = likesCount
+        self.userId = userId
     }
 
     // MARK: Fluent Serialization
@@ -39,6 +42,16 @@ final class Post: Model {
         content = try row.get(Post.contentKey)
         imageUrl = try row.get(Post.imageUrlKey)
         likesCount = try row.get(Post.likesCountKey)
+        userId = try row.get(Post.userIdKey)
+    }
+    
+    func makeNode() throws -> Node {
+        return try Node(node: [
+            "id": id,
+            "userId": userId,
+            "likesCount": likesCount,
+            "content": content
+            ])
     }
 
     // Serializes the Post to the database
@@ -47,6 +60,8 @@ final class Post: Model {
         try row.set(Post.contentKey, content)
         try row.set(Post.imageUrlKey, imageUrl)
         try row.set(Post.likesCountKey, likesCount)
+        try row.set(Post.userIdKey, userId)
+        
         return row
     }
 }
@@ -62,6 +77,7 @@ extension Post: Preparation {
             builder.string(Post.contentKey)
             builder.string(Post.imageUrlKey)
             builder.string(Post.likesCountKey)
+            builder.string(Post.userIdKey)
         }
     }
 
@@ -83,7 +99,8 @@ extension Post: JSONConvertible {
         try self.init(
             content: json.get(Post.contentKey),
             imageUrl: json.get(Post.imageUrlKey),
-            likesCount: json.get(Post.likesCountKey)
+            likesCount: json.get(Post.likesCountKey),
+            userId: json.get(Post.userIdKey)
         )
     }
     
@@ -93,6 +110,7 @@ extension Post: JSONConvertible {
         try json.set(Post.contentKey, content)
         try json.set(Post.imageUrlKey, imageUrl)
         try json.set(Post.likesCountKey, likesCount)
+        try json.set(Post.userIdKey, userId)
         return json
     }
 }
