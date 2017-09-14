@@ -21,7 +21,7 @@ final class Post: Model {
     
     /// The column names for `id` and `content` in the database
     static let idKey = "id"
-    static let userIdKey = "user_id"
+    static let userIdKey = "userId"
     static let contentKey = "content"
     static let imageUrlKey = "imageUrl"
     static let likesCountKey = "likesCount"
@@ -45,15 +45,6 @@ final class Post: Model {
         userId = try row.get(Post.userIdKey)
     }
     
-    func makeNode() throws -> Node {
-        return try Node(node: [
-            "id": id,
-            "userId": userId,
-            "likesCount": likesCount,
-            "content": content
-            ])
-    }
-
     // Serializes the Post to the database
     func makeRow() throws -> Row {
         var row = Row()

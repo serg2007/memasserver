@@ -83,6 +83,7 @@ extension Token: JSONRepresentable {
     func makeJSON() throws -> JSON {
         var json = JSON()
         try json.set("token", token)
+        try json.set("userId", userId)
         return json
     }
 }
