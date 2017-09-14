@@ -16,7 +16,7 @@ final class Post: Model {
     /// The content of the post
     var content: String
     var imageUrl: String
-    var userId: String?
+    var userId: String
     var likesCount: Int = 0
     
     /// The column names for `id` and `content` in the database
